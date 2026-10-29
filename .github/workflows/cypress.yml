@@ -1,0 +1,64 @@
+name: Cypress E2E Tests Pipeline
+
+on:
+  # Disparo automático ao enviar código para as branches principais
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+
+  # Disparo manual (Workflow Dispatch) pela aba Actions do GitHub
+  workflow_dispatch:
+    inputs:
+      browser:
+        description: 'Selecione o navegador para execução dos testes'
+        required: true
+        default: 'chrome'
+        type: choice
+        options:
+          - chrome
+          - electron
+          - firefox
+      spec:
+        description: 'Caminho do teste spec específico (ex: cypress/e2e/testCase1_registerUser.cy.js). Deixe vazio para rodar todos.'
+        required: false
+        default: ''
+        type: string
+
+jobs:
+  cypress-e2e:
+    name: Run Cypress Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Executar Testes Cypress
+        uses: cypress-io/github-action@v6
+        with:
+          browser: ${{ inputs.browser || 'chrome' }}
+          spec: ${{ inputs.spec != '' && inputs.spec || '' }}
+
+      # Salva o relatório HTML do Mochawesome como artefato da pipeline
+      - name: Salvar Relatório Mochawesome
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mochawesome-report
+          path: cypress/reports
+          retention-days: 30
+
+      # Salva screenshots capturados automaticamente em caso de falha
+      - name: Salvar Screenshots de Falhas
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+          retention-days: 7
+
