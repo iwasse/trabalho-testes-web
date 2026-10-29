@@ -1,0 +1,41 @@
+# Dependências do Node.js
+node_modules/
+package-lock.json.backup
+
+# Cypress - Artefatos gerados nas execuções de testes
+cypress/screenshots/
+cypress/videos/
+cypress/downloads/
+
+# Relatórios do Mochawesome e logs
+cypress/reports/
+mochawesome-report/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Arquivos de variáveis de ambiente e segredos locais
+cypress.env.json
+.env
+.env.*
+
+# Arquivos do sistema operacional
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Configurações de IDEs (opcionais / locais)
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.sublime-project
+*.sublime-workspace
+
